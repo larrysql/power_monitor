@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!--<meta http-equiv="refresh" content="10">-->
+    <link rel="stylesheet" type="text/css" href="../static/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/base.css"/>
+    <script type="text/javascript" src="../static/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../static/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/formui.css"/>
+
+    <!--<script type="text/javascript" src="../static/Scripts/tb.js"></script> -->
+    <style type="text/css">
+    table.gridtable {
+        width:100%;
+    	font-family: verdana,arial,sans-serif;
+    	color:#333333;
+    	border-width: 1px;
+    	border-color: #666666;
+    	border-collapse: collapse;
+    }
+    table.gridtable th {
+    	border-width: 1px;
+    	padding: 8px;
+    	border-style: solid;
+    	border-color: #666666;
+    	background-color: #99BBFF;
+        font-size:12px;
+        text-align:center;
+    }
+    table.gridtable td {
+    	border-width: 1px;
+    	padding: 8px;
+    	border-style: solid;
+    	border-color: #666666;
+    	background-color: #ffffff;
+        font-size:11px;
+        text-align:center;
+    }
+    </style>
+
+</head>
+<body>
+    <div class="alert alert-info" id="title">当前位置<b class="tip"></b>ORACLE监控<b class="tip"></b>{{tag}}
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<b>按实例查询:&nbsp;&nbsp;</b>
+               <form style="margin:0px;display:inline;width:100" action="/ora_top_sql" method="POST" id="exact">
+                    <!--<input size="15" placeholder="主机名" name="host_name">-->
+                    &nbsp;&nbsp;
+					<select name="inst_name" style="width:100px;">
+					<option value="none">选择实例名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</option>
+					{% for k in l_inst %}
+					<option>{{ k }}</option>
+					{% endfor %}
+					</select>
+					<!--<input size="15" placeholder="实例名" name="inst_name"> -->
+					<input type="hidden" name="host_name" value="">
+                   &nbsp;&nbsp;<input type="submit" style="display:inline;" value="查询"/>
+                </form>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<b>模糊查询:&nbsp;&nbsp;&nbsp;&nbsp;</b>
+               <form style="margin:0px;display:inline;width:100" action="/ora_top_sql" method="POST" id="fuzzy">
+                    <!--<input size="15" placeholder="主机名" name="host_name"> -->
+                    &nbsp;&nbsp;<input size="15" placeholder="实例名" name="inst_name">
+					<input type="hidden" name="host_name" value="">
+                   &nbsp;&nbsp;<input type="submit" style="display:inline" value="查询"/>
+                </form>
+	</div>
+
+   <!-- Table goes in the document BODY -->
+    <table class="gridtable">
+    <tr>
+    	<th><a href="/ora_top_sql?sk1={{sk1}}&sk2=host_name&s_id={{s_id}}"><b><span id="herf">主机名</span></b></a></th>
+		<th><a href="/ora_top_sql?sk1={{sk1}}&sk2=inst_name&s_id={{s_id}}"><b><span id="herf">实例名</span></b></a></th>
+		<th>sql id</th>
+		<th><a href="/ora_top_sql?sk1=elapsed_time_delta&sk2={{sk2}}&s_id={{s_id}}"><b><span id="herf">执行耗时</span></b></a></th>
+		<th><a href="/ora_top_sql?sk1=cpu_time_delta&sk2={{sk2}}&s_id={{s_id}}"><b><span id="herf">CPU时间</span></b></a></th>
+		<th><a href="/ora_top_sql?sk1=buffer_gets_delta&sk2={{sk2}}&s_id={{s_id}}"><b><span id="herf">逻辑读</span></b></a></th>
+		<th><a href="/ora_top_sql?sk1=disk_reads_delta&sk2={{sk2}}&s_id={{s_id}}"><b><span id="herf">物理读</span></b></a></th>
+		<th><a href="/ora_top_sql?sk1=executions_delta&sk2={{sk2}}&s_id={{s_id}}"><b><span id="herf">执行次数</span></b></a></th>
+		<th><a href="/ora_top_sql?sk1=rows_processed_delta&sk2={{sk2}}&s_id={{s_id}}"><b><span id="herf">处理记录数</span></b></a></th>
+		<th>采样时间</th>
+		<th>图表</th>
+    </tr>
+    {% for entry in entries %}
+        <tr>
+            <td rowspan={{entry|count}}>{{entry[0].host_name}}</td>
+            <td rowspan={{entry|count}}>{{entry[0].inst_name}}</td>
+            <td align="left"><a href=# title="{{entry[0].sql_text}}">{{entry[0].sql_id}}</a></td>
+            <!--<td>{{entry[0].sql_text}}</td> -->
+            <td>{{entry[0].elapsed_time_delta}}</td>
+            <td>{{entry[0].cpu_time_delta}}</td>
+			<td>{{entry[0].buffer_gets_delta}}</td>
+			<td>{{entry[0].disk_reads_delta}}</td>
+			<td>{{entry[0].executions_delta}}</td>
+			<td>{{entry[0].rows_processed_delta}}</td>
+            <td rowspan={{entry|count}}>{{entry[0].snap_time}}</td>
+            <td rowspan={{entry|count}}><a href="/ora_top_sql_detail?inst_id={{entry[0].inst_id}}&sk1=buffer_gets_delta&sk2=inst_name">图表</a></td>
+        {% set i= 0 %}
+        {% for x in entry %}
+            {% if i>0 %}
+            <td class="td_event"><a href=# title="{{x.sql_text}}">{{x.sql_id}}</a></td>
+            <!--<td>{{x.sql_text}}</td> -->
+            <td>{{x.elapsed_time_delta}}</td>
+            <td>{{x.cpu_time_delta}}</td>
+			<td>{{x.buffer_gets_delta}}</td>
+			<td>{{x.disk_reads_delta}}</td>
+			<td>{{x.executions_delta}}</td>
+			<td>{{x.rows_processed_delta}}</td>
+            {% endif %}
+            {% set i = i + 1 %}
+        </tr>
+        {% endfor %}
+    {% endfor %}
+    </table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

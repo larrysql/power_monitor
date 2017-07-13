@@ -1,0 +1,594 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/base.css"/>
+    <script type="text/javascript" src="../static/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../static/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <script type="text/javascript" src="../static/Scripts/highcharts.js"></script>
+	<script type="text/javascript" src="../static/Scripts/chartkick.js"></script>
+    <script type="text/javascript" src="../static/Scripts/laydate.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/formui.css"/>
+    <script type="text/javascript">
+        function json_data(stat_name){
+                        var data_graph;
+                        $.ajax({
+                            url: "/ora_load_json_range",
+                            data:"id={{inst_id}}&stat_name='" + stat_name +"'&period={{period}}",
+                            type: "GET",
+                            async: false,
+                            success: function (data) {
+                               data_graph = data;
+                            }
+                        });
+                        return data_graph;
+                    }
+            var jd = eval(json_data('redo_size'));
+            //alert(eval(eval(json_data('session_logical_reads'))))
+            var inst_id = {{inst_id}}
+            //alert('id='+inst_id);
+//======================================redo size=================================================================
+        $(function() {
+            Highcharts.setOptions({
+            lang: {
+                numericSymbols: null
+                },
+            global: { useUTC: false }
+            });
+			$('#redo').highcharts({
+                    chart: {
+                        type: 'spline',
+                        marginRight: 10,
+                        marginLeft: 80,
+                        marginBottom: 50,
+                        animation: Highcharts.svg,
+                    },
+                    title: {
+                        text: 'REDO日志',
+                        x: -20
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval : {{tick}}*3600*1000,
+						labels: {step: 4,overflow:'justify'},
+                        type: 'datetime',
+                        tickWidth:1,//刻度的宽度
+                        lineColor:'#990000',//自定义刻度颜色
+                        lineWidth:1,//自定义x轴宽度
+                        gridLineWidth:1,//默认是0，即在图上没有纵轴间隔线
+                        dateTimeLabelFormats: {
+                        second: '%H:%M:%S',
+					    minute: '%e. %b %H:%M',
+					    hour: '%b/%e %H:%M',
+					    day: '%e日/%b',
+					    week: '%e. %b',
+					    month: '%b %y',
+					    year: '%Y'
+                            }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'redo size'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#990000'
+                        }],
+                        lineWidth:1,
+                        lineColor:'#990000',
+                        min:0,
+                        startOnTick: false
+                    },
+                    legend: {
+                        align:'center',
+                        verticalAlign:'top',
+                        x: 100,
+                        y: 0,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                    // 第1条曲线的(name, data)对
+                    {
+                        name: 'redo size/s',
+                        data:eval(eval(json_data('redo_size')))
+                    }
+                    ]
+                });
+            });
+//======================================logical reads=================================================================
+        $(function() {
+                $('#lio').highcharts({
+                    chart: {
+                        type: 'spline',
+                        marginRight: 10,
+                        marginLeft: 80,
+                        marginBottom: 50,
+                        animation: Highcharts.svg,
+                    },
+                    title: {
+                        text: '逻辑读',
+                        x: -20
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval : {{tick}}*3600*1000,
+						labels: {step: 4,overflow:'justify'},
+                        type: 'datetime',
+                        tickWidth:1,//刻度的宽度
+                        lineColor:'#990000',//自定义刻度颜色
+                        lineWidth:1,//自定义x轴宽度
+                        gridLineWidth:1,//默认是0，即在图上没有纵轴间隔线
+                        dateTimeLabelFormats: {
+                        second: '%H:%M:%S',
+					    minute: '%e. %b %H:%M',
+					    hour: '%b/%e %H:%M',
+					    day: '%e日/%b',
+					    week: '%e. %b',
+					    month: '%b %y',
+					    year: '%Y'
+                            }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'logical reads'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#990000'
+                        }],
+                        lineWidth:1,
+                        lineColor:'#990000',
+                        min:0,
+                        startOnTick: false
+                    },
+                    legend: {
+                        align:'center',
+                        verticalAlign:'top',
+                        x: 100,
+                        y: 0,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                    // 第1条曲线的(name, data)对
+                    {
+                        name: 'logical reads/s',
+                        data:eval(eval(json_data('session_logical_reads')))
+				//		data: (function () {
+				//		// generate an array of random data
+				//		var data = [],
+				//			time = (new Date()).getTime(),
+				//			i;
+                //
+				//		for (i = -1900; i <= 0; i += 100) {
+				//			data.push({
+				//				x: time + i * 1000,
+				//				y: Math.random()
+				//			});
+				//		}
+                //    return data;
+                //}())
+                    }
+                    ]
+                });
+            });
+//========================================================execute count=====================================================================
+        $(function() {
+                $('#exec').highcharts({
+                    chart: {
+                        type: 'spline',
+                        marginRight: 10,
+                        marginLeft: 80,
+                        marginBottom: 50,
+                        animation: Highcharts.svg,
+                    },
+                    title: {
+                        text: '执行次数',
+                        x: -20
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval : {{tick}}*3600*1000,
+                        labels: {step: 4,overflow:'justify'},
+                        type: 'datetime',
+                        tickWidth:1,//刻度的宽度
+                        lineColor:'#990000',//自定义刻度颜色
+                        lineWidth:1,//自定义x轴宽度
+                        gridLineWidth:1,//默认是0，即在图上没有纵轴间隔线
+                        dateTimeLabelFormats: {
+                        second: '%H:%M:%S',
+					    minute: '%e. %b %H:%M',
+					    hour: '%b/%e %H:%M',
+					    day: '%e日/%b',
+					    week: '%e. %b',
+					    month: '%b %y',
+					    year: '%Y'
+                            }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'execute count'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#990000'
+                        }],
+                        lineWidth:1,
+                        lineColor:'#990000',
+                        min:0
+                    },
+                    legend: {
+                        align:'center',
+                        verticalAlign:'top',
+                        x: 100,
+                        y: 0,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                    // 第1条曲线的(name, data)对
+                    {
+                        name: 'execute count/s',
+                        data:eval(eval(json_data('execute_count')))
+                    }
+                    ]
+                });
+            });
+//=======================================================physical reads=====================================================================
+        $(function() {
+                $('#pio').highcharts({
+                    chart: {
+                        type: 'spline',
+                        marginRight: 10,
+                        marginLeft: 80,
+                        marginBottom: 50,
+                        animation: Highcharts.svg,
+                    },
+                    title: {
+                        text: '物理读',
+                        x: -20
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval : {{tick}}*3600*1000,
+                        labels: {step: 4,overflow:'justify'},
+                        type: 'datetime',
+                        tickWidth:1,//刻度的宽度
+                        lineColor:'#990000',//自定义刻度颜色
+                        lineWidth:1,//自定义x轴宽度
+                        gridLineWidth:1,//默认是0，即在图上没有纵轴间隔线
+                        dateTimeLabelFormats: {
+                        second: '%H:%M:%S',
+					    minute: '%e. %b %H:%M',
+					    hour: '%b/%e %H:%M',
+					    day: '%e日/%b',
+					    week: '%e. %b',
+					    month: '%b %y',
+					    year: '%Y'
+                            }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'physical reads'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#990000'
+                        }],
+                        lineWidth:1,
+                        lineColor:'#990000',
+                        min:0
+                    },
+                    legend: {
+                        align:'center',
+                        verticalAlign:'top',
+                        x: 100,
+                        y: 0,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                    // 第1条曲线的(name, data)对
+                    {
+                        name: 'physical reads/s',
+                        data:eval(eval(json_data('physical_reads')))
+                    }
+                    ]
+                });
+            });
+//===============================================physical_writes=============================================================================
+        $(function() {
+                $('#pwr').highcharts({
+                    chart: {
+                        type: 'spline',
+                        marginRight: 10,
+                        marginLeft: 80,
+                        marginBottom: 50,
+                        animation: Highcharts.svg,
+                    },
+                    title: {
+                        text: '物理写',
+                        x: -20
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval : {{tick}}*3600*1000,
+                        labels: {step: 4,overflow:'justify'},
+                        type: 'datetime',
+                        tickWidth:1,//刻度的宽度
+                        lineColor:'#990000',//自定义刻度颜色
+                        lineWidth:1,//自定义x轴宽度
+                        gridLineWidth:1,//默认是0，即在图上没有纵轴间隔线
+                        dateTimeLabelFormats: {
+                        second: '%H:%M:%S',
+					    minute: '%e. %b %H:%M',
+					    hour: '%b/%e %H:%M',
+					    day: '%e日/%b',
+					    week: '%e. %b',
+					    month: '%b %y',
+					    year: '%Y'
+                            }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'physical writes'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#990000'
+                        }],
+                        lineWidth:1,
+                        lineColor:'#990000',
+                        min:0
+                    },
+                    legend: {
+                        align:'center',
+                        verticalAlign:'top',
+                        x: 100,
+                        y: 0,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                    // 第1条曲线的(name, data)对
+                    {
+                        name: 'physical writes/s',
+                        data:eval(eval(json_data('physical_writes')))
+                    }
+                    ]
+                });
+            });
+//===================================================parse==================================================================================
+        $(function() {
+                $('#parse').highcharts({
+                    chart: {
+                        type: 'spline',
+                        marginRight: 10,
+                        marginLeft: 80,
+                        marginBottom: 50,
+                        animation: Highcharts.svg,
+                    },
+                    title: {
+                        text: '解析次数',
+                        x: -20
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval : {{tick}}*3600*1000,
+                        labels: {step: 4,overflow:'justify'},
+                        type: 'datetime',
+                        tickWidth:1,//刻度的宽度
+                        lineColor:'#990000',//自定义刻度颜色
+                        lineWidth:1,//自定义x轴宽度
+                        gridLineWidth:1,//默认是0，即在图上没有纵轴间隔线
+                        dateTimeLabelFormats: {
+                        second: '%H:%M:%S',
+					    minute: '%e. %b %H:%M',
+					    hour: '%b/%e %H:%M',
+					    day: '%e日/%b',
+					    week: '%e. %b',
+					    month: '%b %y',
+					    year: '%Y'
+                            }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'parse'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#990000'
+                        }],
+                        lineWidth:1,
+                        lineColor:'#990000',
+                        min:0
+                    },
+                    legend: {
+                        align:'center',
+                        verticalAlign:'top',
+                        x: 100,
+                        y: 0,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                    // 第1条曲线的(name, data)对
+                    {
+                        name: 'parse/s',
+                        data:eval(eval(json_data('parse_count_total')))
+                    }
+                    ]
+                });
+            });
+//===================================================buffer hit ratio=======================================
+        $(function() {
+                $('#buff_hit_ratio').highcharts({
+                    chart: {
+                        type: 'spline',
+                        marginRight: 10,
+                        marginLeft: 80,
+                        marginBottom: 50,
+                        animation: Highcharts.svg,
+
+                        events: {
+                            load: function() {
+                                var series_parse = this.series[0];
+                                setInterval(function() {
+                                    jQuery.getJSON('/ora_load_json',"id="+inst_id+"&stat_name='buff_hit_ratio'",
+                                    function(data) {
+                                        // x轴数据 redo
+                                        var snap_time = data[0];
+                                        // y轴数据
+                                        var value = data[1];
+                                        // 更新曲线数据
+                                        series_parse.addPoint([snap_time, value], true, true);
+                                    });
+                                },
+                                10 * 1000/*启动间隔，单位ms*/
+                                );
+                            }
+                        }
+                    },
+                    title: {
+                        text: 'buffer cache 命中率',
+                        x: -20
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval : {{tick}}*3600*1000,
+                        labels: {step: 4,overflow:'justify'},
+                        type: 'datetime',
+                        tickWidth:1,//刻度的宽度
+                        lineColor:'#990000',//自定义刻度颜色
+                        lineWidth:1,//自定义x轴宽度
+                        gridLineWidth:1,//默认是0，即在图上没有纵轴间隔线
+                        dateTimeLabelFormats: {
+                        second: '%H:%M:%S',
+					    minute: '%e. %b %H:%M',
+					    hour: '%b/%e %H:%M',
+					    day: '%e日/%b',
+					    week: '%e. %b',
+					    month: '%b %y',
+					    year: '%Y'
+                            }
+                    },
+                    yAxis: {
+                        title: {
+                            text: '命中率'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#990000'
+                        }],
+                        lineWidth:1,
+                        lineColor:'#990000',
+                        min:0
+                    },
+                    legend: {
+                        align:'center',
+                        verticalAlign:'top',
+                        x: 100,
+                        y: 0,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                    // 第1条曲线的(name, data)对
+                    {
+                        name: 'parse/s',
+                        data:eval(eval(json_data('buff_hit_ratio')))
+                    }
+                    ]
+                });
+            });
+        </script>
+    		<style type="text/css">
+			#herf{
+				color:blue;
+			}
+            #title{
+                margin:2px;
+            }
+		</style>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/tab_list2.css"/>
+    <!--<script type="text/javascript" src="../static/Scripts/tb.js"></script> -->
+</head>
+<body>
+    <div class="alert alert-info" id="title">
+			<b class="tip"></b>ORACLE监控<b class="tip"></b>负载监控<b class="tip"></b>{{tag}}
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="/ora_load_detail?inst_id={{inst_id}}&period=1"><b>1小时内</b></a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="/ora_load_detail?inst_id={{inst_id}}&period=24"><b>1天内</b></a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="/ora_load_detail?inst_id={{inst_id}}&period=168"><b>1周内</b></a>
+        &nbsp;&nbsp;&nbsp;&nbsp; <b>自定义查询:&nbsp;&nbsp;&nbsp;&nbsp;</b>
+               <form style="margin:0px;display:inline" action="/ora_load_detail" method="POST" id="dateform">
+                    <input placeholder="请输入起始日期" name="begin_date" class="laydate-icon" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                    &nbsp;&nbsp;<input placeholder="请输入结束日期" name="end_date" class="laydate-icon" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                   &nbsp;&nbsp;<input type="submit" style="display:inline" value="查询"/>
+                   <input type="hidden" name="inst_id" value={{inst_id}}>
+               </form>
+	</div>
+<article class="tabs">
+		<input class="radio" checked id="one" name="tabs" type="radio">
+	    <label for="one">数据库负载</label>
+	    <input class="radio" id="two" name="tabs" type="radio" value="Two">
+	    <label for="two">RAC负载</label>
+	    <input class="radio" id="three" name="tabs" type="radio">
+	    <label for="three">SGA命中率</label>
+	    <input class="radio" id="four" name="tabs" type="radio">
+	    <label for="four">PGA命中率</label>
+	    <div class="panels">
+		    <div class="panel">
+				<div id="lio" style="height:400px; width:50%; float:left"></div>
+                <div id="redo" style="height:400px; width:50%; float:left"></div>
+                <div id="exec" style="height:400px; width:50%; float:left"></div>
+                <div id="pio" style="height:400px; width:50%; float:left"></div>
+	            <div id="pwr" style="height:400px; width:50%; float:left"></div>
+	            <div id="parse" style="height:400px; width:50%; float:left"></div>
+
+		    </div>
+		    <div class="panel">
+                非RAC数据库,无RAC负载信息
+		    </div>
+		    <div class="panel">
+                <div id="buff_hit_ratio" style="height:400px; width:50%; float:left"></div>
+		    </div>
+		    <div class="panel">
+		    </div>
+		</div>
+    </article>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>js</title>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/base.css"/>
+    <script type="text/javascript" src="../static/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../static/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/formui.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/tab_list.css"/>
+    <script type="text/javascript" src="../static/Scripts/tab_list.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/tab_list2.css"/>
+    <style type="text/css">
+            #title{
+                margin:4px;
+            }
+    </style>
+</head>
+    <div class="alert alert-info" id="title">当前位置<b class="tip"></b>ORACLE监控<b class="tip"></b>{{tag}}
+    </div>
+<article class="tabs">
+		<input class="radio" checked id="one" name="tabs" type="radio">
+	    <label for="one">基本信息</label>
+	    <input class="radio" id="two" name="tabs" type="radio" value="Two">
+	    <label for="two">表空间信息</label>
+	    <input class="radio" id="three" name="tabs" type="radio">
+	    <label for="three">参数信息</label>
+	    <input class="radio" id="four" name="tabs" type="radio">
+	    <label for="four">用户信息</label>
+        <input class="radio" id="five" name="tabs" type="radio">
+	    <label for="five">数据库对象</label>
+	    <div class="panels">
+		    <div class="panel">
+                 <p>实例信息：</p>
+		     <table class="gridtable">
+                <tr>
+    	            <th align="center">主机</th><th>实例</th><th>状态</th>
+                    <th>运行时间(天)</th><th>版本</th><th>会话数</th><th>活动会话数</th><th>等待进程数</th><th>锁等待进程数</th><th>查看</th>
+                </tr>
+                {% for entry in rs_inst %}
+                 <tr>
+    	            <td width="12%">{{entry.HOST_NAME}}</td><td>{{entry.INSTANCE_NAME}}</td><td>{{entry.STATUS}}</td>
+                     <td>{{entry.UPTIME}}</td><td>{{entry.VERSION}}</td><td>{{entry.CNT_ALL}}</td>
+                     <td>{{entry.CNT_ACTIVE}}</td><td>{{entry.CNT_WAIT}}</td><td>{{entry.CNT_ENQ}}</td>
+                     <td><a href="/ora_inst_detail?inst_id={{entry.id}}" target="_blank">点击查看</a></td>
+                </tr>
+                {% endfor %}
+		     </table>
+             <br>
+             <p>数据库信息：</p>
+             <table class="gridtable">
+             <tr>
+             	<th>数据库</th><th>DBID</th><th>db_unique_name</th><th>创建时间</th>
+                 <th>平台</th><th>归档模式</th><th>open_mod</th><th>force logging</th><th>flashback</th><th>数据库角色</th>
+             </tr>
+                 {% for entry in rs_db %}
+             <tr>
+             	<td>{{entry[0]}}</td><td>{{entry[1]}}</td><td>{{entry[2]}}</td>
+                 <td>{{entry[3]}}</td><td>{{entry[4]}}</td><td>{{entry[5]}}</td><td>{{entry[6]}}</td>
+                 <td>{{entry[7]}}</td><td>{{entry[8]}}</td><td>{{entry[9]}}</td>
+             </tr>
+                 {% endfor %}
+             </table>
+             <br>
+             <p>控制文件信息:</p>
+             <table class="gridtable">
+                 <tr>
+                 	<th>名称</th><th>状态</th><th>文件大小</th>
+                 </tr>
+                     {% for entry in rs_ctlfile %}
+                 <tr>
+                 	<td width="40%">{{entry[0]}}</td><td>{{entry[1]}}</td><td>{{entry[2]}}</td>
+                 </tr>
+                     {% endfor %}
+             </table>
+             <br>
+             <p>REDO日志信息:</p>
+             <table class="gridtable">
+                 <tr>
+                 	<th>实例名</th><th>thread#</th><th>group no</th><th>member</th><th>Redo Type</th><th>状态</th><th>大小</th><th>Archived?</th>
+                 </tr>
+                     {% for entry in rs_redo %}
+                 <tr>
+                 	<td>{{entry[0]}}</td><td>{{entry[1]}}</td><td>{{entry[2]}}</td><td>{{entry[3]}}</td>
+                     <td>{{entry[4]}}</td><td>{{entry[5]}}</td><td>{{entry[6]}}</td><td>{{entry[7]}}</td>
+                 </tr>
+                     {% endfor %}
+             </table>
+		    </div>
+		    <div class="panel">
+                   <p>表空间信息:</p>
+                <table class="gridtable">
+                    <tr>
+                    	<th>表空间状态</th><th>表空间名</th><th align="left" width="100px">表空间类型</th>
+                        <th>区管理方式</th><th>段管理方式</th><th>表空间大小(MB)</th><th>剩余空间(MB)</th><th>已使用(MB)</th><th>使用率</th>
+                    </tr>
+                        {% for entry in rs_tbs_usage %}
+                    <tr>
+                    	<td>{{entry[0]}}</td><td>{{entry[1]}}</td><td>{{entry[2]}}</td>
+                        <td>{{entry[3]}}</td><td>{{entry[4]}}</td><td>{{entry[5]}}</td>
+                        <td>{{entry[6]}}</td><td>{{entry[7]}}</td><td>{{entry[8]}}</td>
+                    </tr>
+                     {% endfor %}
+                </table>
+                <br>
+                <p>数据文件信息:</p>
+                <table class="gridtable">
+                    <tr>
+                    	<th>表空间名称</th><th>数据文件名称</th><th align="left" width="100px">数据文件大小(MB)</th>
+                        <th>自动扩展</th><th>最大空间</th>
+                    </tr>
+                        {% for entry in rs_tbs_datafile %}
+                    <tr>
+                    	<td>{{entry[0]}}</td><td bgcolor="red">{{entry[1]}}</td><td>{{entry[2]}}</td>
+                        <td>{{entry[3]}}</td><td>{{entry[5]}}</td>
+                    </tr>
+                     {% endfor %}
+                </table>
+		    </div>
+		    <div class="panel">
+                <table class="gridtable">
+                    <tr>
+                    	<th>参数名</th><th>实例名</th><th align="left" width="100px">参数值</th><th>Is Default?</th><th>Is Dynamic?</th>
+                    </tr>
+                        {% for entry in rs_para %}
+                    <tr>
+                    	<td>{{entry[0]}}</td><td>{{entry[1]}}</td><td align="left">{{entry[2]}}</td>
+                        <td align="center">{{entry[3]}}</td><td>{{entry[4]}}</td>
+                    </tr>
+                     {% endfor %}
+                </table>
+		    </div>
+            <div class="panel">
+                <table class="gridtable">
+                    <tr>
+                    	<th>用户名</th><th>状态</th><th align="left" width="100px">默认表空间</th>
+                        <th>默认临时表空间</th><th>创建时间</th><th>PROFILE</th>
+                    </tr>
+                        {% for entry in rs_user %}
+                    <tr>
+                    	<td>{{entry[0]}}</td><td>{{entry[1]}}</td><td align="left">{{entry[2]}}</td>
+                        <td align="center">{{entry[3]}}</td><td>{{entry[4]}}</td><td>{{entry[5]}}</td>
+                    </tr>
+                     {% endfor %}
+                </table>
+            </div>
+             <div class="panel">
+                 数据库对象
+             </div>
+		</div>
+    </article>
+    <!-- 代码 开始 -->
+    <!--<div id="tab" style="margin-left:10px;margin-top:0px;">
+      <div class="tabList">
+    	<ul>
+    		<li class="cur">基本信息</li>
+    		<li>表空间信息</li>
+    		<li>参数信息</li>
+    		<li>用户信息</li>
+            <li>数据库对象</li>
+    	</ul>
+      </div>
+      <div class="tabCon">
+    	<div class="cur">
+
+    <br>
+        </div>
+    	<div>
+
+        </div>
+    	<div>
+
+        </div>
+    	<div>
+            <table class="gridtable">
+                <tr>
+                	<th>用户名</th><th>状态</th><th align="left" width="100px">默认表空间</th>
+                    <th>默认临时表空间</th><th>创建时间</th><th>PROFILE</th>
+                </tr>
+                    {% for entry in rs_user %}
+                <tr>
+                	<td>{{entry[0]}}</td><td>{{entry[1]}}</td><td align="left">{{entry[2]}}</td>
+                    <td align="center">{{entry[3]}}</td><td>{{entry[4]}}</td><td>{{entry[5]}}</td>
+                </tr>
+                 {% endfor %}
+            </table>
+        </div>
+        <div>数据库对象</div>
+      </div>
+    </div>-->
+    <!-- 代码 结束 -->
+</body>
+</html>

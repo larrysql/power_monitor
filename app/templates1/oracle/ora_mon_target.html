@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/base.css"/>
+    <script type="text/javascript" src="../static/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../static/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/formui.css"/>
+    <!--<script type="text/javascript" src="../static/Scripts/tb.js"></script> -->
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+    <div class="alert alert-info">当前位置<b class="tip"></b>ORACLE监控<b class="tip"></b>{{tag}}</div>
+   <!-- Table goes in the document BODY -->
+    <table class="gridtable_alert_target">
+     <tr>
+    	<th align="center">告警类别</th><th>子类</th><th width="10%">名称</th><th>次要告警</th><th>主要告警</th><th>严重告警</th><th>是否启用</th>
+    </tr>
+        {% for entry in entries %}
+    <tr>
+    	<td width="12%">{{entry.class}}</td><td width="12%">{{entry.type}}</td><td width="10%">{{entry.name}}</td><td>{{entry.level1}}</td><td>{{entry.level2}}</td><td>{{entry.level3}}</td>
+        <td>{{entry.enable}}</td>
+    </tr>
+     {% endfor %}
+    </table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

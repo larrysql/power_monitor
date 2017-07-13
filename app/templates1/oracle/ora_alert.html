@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title> 
+    <link rel="stylesheet" type="text/css" href="../static/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/base.css"/>
+    <script type="text/javascript" src="../static/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../static/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/formui.css"/>
+    <!--<script type="text/javascript" src="../static/Scripts/tb.js"></script> -->
+</head>
+<body>
+    <div class="alert alert-info">当前位置<b class="tip"></b>ORACLE监控<b class="tip"></b>{{tag}}</div>
+   <!-- Table goes in the document BODY -->
+    <table class="gridtable">
+    <tr>
+    	<th>主机</th><th>IP</th><th>实例</th><th>数据库</th><th>应用组</th><th>次要告警</th>
+        <th>主要告警</th><th>严重告警</th><th>详情</th>
+    </tr>
+        {% for entry in entries %}
+    <tr>
+    	<td width="12%">{{entry.host_name}}</td><td width="12%">{{entry.ip_addr}}</td><td>{{entry.inst_name}}</td><td>{{entry.db_name}}</td><td>{{entry.gname}}</td><td>{{entry.sum_lv1}}</td>
+        <td>{{entry.sum_lv2}}</td><td>{{entry.sum_lv3}}</td><td><a href="/ora_alert_detail?inst_id={{entry.id}}">点击查看</a></td>
+    </tr>
+     {% endfor %}
+    </table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

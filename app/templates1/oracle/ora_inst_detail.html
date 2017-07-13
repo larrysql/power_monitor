@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>oracle实例详细信息</title>
+    <link rel="stylesheet" type="text/css" href="static/Styles/admin-all.css" />
+    <!--<link rel="stylesheet" type="text/css" href="static/Styles/inst_detail.css" />-->
+    <link rel="stylesheet" type="text/css" href="static/Styles/base.css" />
+    <link rel="stylesheet" type="text/css" href="static/Styles/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="static/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <script type="text/javascript" src="static/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="static/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <script type="text/javascript" src="static/Scripts/index.js"></script>
+</head>
+<body>
+    <div class="warp">
+        <!--头部开始-->
+        <div class="top_c">
+            <div class="top-menu">
+                <ul class="top-menu-nav">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">ORACLE监控<i class="tip-up"></i></a>
+                        <ul class="kidc">
+							<li><a target="Conframe" href="/ora_alert">数据库列表</a></li>
+                            <li><a target="Conframe" href="/ora_alert">监控告警</a></li>
+                            <li><a target="Conframe" href="templates/Template/ora_load">负载监控</a></li>
+                            <li><a target="Conframe" href="templates/Template/find-order.html">空间资源</a></li>
+                            <li><a target="Conframe" href="templates/Template/find-1.html">统计报表</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="top-nav">上午好，欢迎您，{{username}}&nbsp;&nbsp;<a href="#">修改密码</a> | <a href="/logout">安全退出</a></div>
+        </div>
+        <!--头部结束-->
+        <!--左边菜单开始-->
+        <!--<div class="left_c1 left1">-->
+        <div>
+            <!--<h1>数据库详细信息</h1>-->
+            <div class="acc">
+                <div>
+                    <a class="one">数据库实例详细信息</a>
+                    <ul class="kid">
+						<li><b class="tip"></b><a target="Conframe" href="/ora_inst_detail_info?inst_id={{inst_id}}&info_name='main_info'">详细信息</a></li>
+                        <li><b class="tip"></b><a target="Conframe" href="/ora_alert_detail?inst_id={{inst_id}}">监控告警</a></li>
+                        <li><b class="tip"></b><a target="Conframe" href="/ora_load_detail?inst_id={{inst_id}}&period=1">负载监控</a></li>
+                        <li><b class="tip"></b><a target="Conframe" href="/ora_event_detail?inst_id={{inst_id}}">等待事件</a></li>
+                        <li><b class="tip"></b><a target="Conframe" href="/ora_top_sql_detail?inst_id={{inst_id}}&sk1=buffer_gets_delta&sk2=inst_name">TOP SQL</a></li>
+                        <li><b class="tip"></b><a target="Conframe" href="templates/Template/find-order.html">空间资源</a></li>
+                        <li><b class="tip"></b><a target="Conframe" href="templates/Template/find-1.html">统计报表</a></li>
+                    </ul>
+                </div>
+
+                <!--<div id="datepicker"></div>-->
+            </div>
+
+        </div>
+        <!--左边菜单结束-->
+        <!--右边框架开始-->
+        <div class="right_c">
+            <div class="nav-tip" onclick="javascript:void(0)">&nbsp;</div>
+
+        </div>
+        <div class="Conframe">
+            <iframe name="Conframe" width="150%" id="Conframe"></iframe>
+        </div>
+        <!--右边框架结束-->
+
+        <!--底部开始-->
+        <div class="bottom_c">Copyright &copy;2016 北京庄道科技有限公司 版权所有</div>
+        <!--底部结束-->
+    </div>
+</body>
+</html>

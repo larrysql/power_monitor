@@ -1,0 +1,168 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/base.css"/>
+    <script type="text/javascript" src="../static/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../static/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <script type="text/javascript" src="../static/Scripts/highcharts.js"></script>
+	<script type="text/javascript" src="../static/Scripts/chartkick.js"></script>
+    <script type="text/javascript" src="../static/Scripts/laydate.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="../static/Styles/formui.css"/>
+    <script type="text/javascript">
+        function json_data(chart_type){
+                        var data_graph;
+                        $.ajax({
+                            url: "/ora_event_json_range",
+                            data:"id={{inst_id}}&begin_date={{begin_date}}&end_date={{end_date}}&chart_type='"+chart_type+"'",
+                            type: "GET",
+                            async: false,
+                            success: function (data) {
+                               data_graph = data;
+                            }
+                        });
+                        return data_graph;
+                    }
+            var snap_time;
+            //alert(snap_time);
+            var inst_id = {{inst_id}}
+//======================================event pie=================================================================
+        $(function () {
+        $('#pie').highcharts({
+        chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        },
+        title: {
+        text: 'Top 5 event'
+        },
+        tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+        pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {enabled: false,
+        //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+        //style: {
+        //color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+        //}
+        },
+        showInLegend: true
+        }
+        },
+        series: [{
+        type: 'pie',
+        name: '占比',
+        data:eval(eval(json_data('pie')))
+        //data:json_data()
+        }]
+        });
+        });
+//===============================================event column==========================================================
+        $(function () {
+        $('#column').highcharts({
+        chart: {
+        type:'column',
+        //plotBackgroundColor: null,
+        //plotBorderWidth: null,
+        //plotShadow: false,
+        },
+        title: {
+        text: 'Top 5 event'
+        },
+        xAxis: {
+                    type: 'category',
+                    labels: {
+                        rotation: -45
+                    },
+                    lineColor:'#990000',//自定义刻度颜色
+                    lineWidth:1,//自定义x轴宽度
+        },
+        yAxis: {
+            title: {
+                text: 'wait time(s)'
+            },
+            plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#990000'
+                        }],
+                        lineWidth:1,
+                        lineColor:'#990000',
+                        min:0,
+                        startOnTick: false
+        },
+        legend: {
+            enabled: false
+            },
+        tooltip: {
+        pointFormat: '{series.name}: <b>{point.y:.1f}秒</b>'
+        },
+        plotOptions: {
+            column: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {enabled: false},
+            showInLegend: true
+            }
+        },
+        series: [{
+        name: '等待时间',
+        colorByPoint: true,
+        data:eval(eval(json_data('column')))
+        }]
+        });
+        });
+
+ </script>
+    <!--<script type="text/javascript" src="../static/Scripts/tb.js"></script> -->
+    <style type="text/css">
+			#herf{
+				color:blue;
+			}
+	</style>
+</head>
+<body>
+    <div class="alert alert-info" id="title">
+        <div>
+			    <b class="tip"></b>ORACLE监控<b class="tip"></b>负载监控<b class="tip"></b>{{tag}}
+			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="/ora_event_range?inst_id={{inst_id}}&period=10"><b><span id="herf">最近10分钟</span></b></a>
+			    &nbsp;&nbsp;&nbsp;&nbsp;
+			    <a href="/ora_event_range?inst_id={{inst_id}}&period=30"><b><span id="herf">最近30分钟</span></b></a>
+			    &nbsp;&nbsp;&nbsp;&nbsp;
+			    <a href="/ora_event_range?inst_id={{inst_id}}&period=60000"><b><span id="herf">最近1小时</span></b></a>
+               &nbsp;&nbsp;&nbsp;&nbsp; <b>自定义查询:&nbsp;&nbsp;&nbsp;&nbsp;</b>
+               <form style="margin:0px;display:inline" action="/ora_event_range" method="POST" id="dateform">
+                    <input placeholder="请输入起始日期" name="begin_date" class="laydate-icon" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                    &nbsp;&nbsp;<input placeholder="请输入结束日期" name="end_date" class="laydate-icon" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                   &nbsp;&nbsp;<input type="submit" style="display:inline" value="查询"/>
+                   <input type="hidden" name="inst_id" value={{inst_id}}>
+                </form>
+        </div>
+	</div>
+    <div>
+        <div id="pie" style="height:350px; width:50%; float:left"></div>
+        <div id="column" style="height:350px; width:50%; float:left"></div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

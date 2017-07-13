@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="10">
+    <title>ajax test</title>
+    <script type="text/javascript" src="../static/Scripts/jquery-1.7.2.js"></script>
+    <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+<script>
+	function loadData(){
+		//发出请求
+		$.getJSON('/ora_load', function(data){//得到内容
+			var ret = [];
+            var result = data.result
+			$.each(result, function(i, entry){//遍历返回的数据
+				var html='<tr>';
+				html+='<td  bgcolor="#FFFFFF">'+entry['host_name']+'</td>';
+				html+='<td  bgcolor="#FFFFFF">'+entry['redo_size']+'</td>';
+				html+='<td  bgcolor="#FFFFFF">'+entry['execute_count']+'</td>';
+				html+='<td  bgcolor="#FFFFFF">'+entry['session_logical_reads']+'</td>';
+				html+='</tr>';
+				ret.push(html);//存入数组
+			});
+
+			//ret.reverse();//如果目前显示的顺序不符合你的需求,你可将本行的注释去掉,让数组反转一下就可以了
+
+			$('#title').html('<table>' + ret.join('') + '</table>');//将数组合并后,写入 #title 中
+			//你之前是用的 $('#title').after(html);
+			//是将内容放在title的后面, 我这里是把内容放在 #title的容器里面的,
+			//具体要放哪里,请自行修改上面的代码
+		});
+	}
+
+   $(document).ready(function(){//DOMReady时触发
+		loadData();//先执行一次,将内容显示出来
+		setInterval(loadData, 10*1000);//然后每隔10秒执行一次,时间请根据需要自己修改
+   });
+
+  </script>
+
+</head>
+ <body>
+   <div id="title"></div>
+ </body>
+</html>

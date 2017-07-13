@@ -1,0 +1,115 @@
+NAME=ora.ARCH.dg
+TYPE=ora.diskgroup.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.DATA.dg
+TYPE=ora.diskgroup.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.LISTENER.lsnr
+TYPE=ora.listener.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.LISTENER_SCAN1.lsnr
+TYPE=ora.scan_listener.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb2
+
+NAME=ora.SYS.dg
+TYPE=ora.diskgroup.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.asm
+TYPE=ora.asm.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.cvu
+TYPE=ora.cvu.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.gsd
+TYPE=ora.gsd.type
+TARGET=OFFLINE
+STATE=OFFLINE
+
+NAME=ora.net1.network
+TYPE=ora.network.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.oc4j
+TYPE=ora.oc4j.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.ons
+TYPE=ora.ons.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.pointdb.db
+TYPE=ora.database.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.pointdb1.ASM1.asm
+TYPE=application
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.pointdb1.LISTENER_POINTDB1.lsnr
+TYPE=application
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.pointdb1.gsd
+TYPE=application
+TARGET=OFFLINE
+STATE=OFFLINE
+
+NAME=ora.pointdb1.ons
+TYPE=application
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.pointdb1.vip
+TYPE=ora.cluster_vip_net1.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb1
+
+NAME=ora.pointdb2.ASM2.asm
+TYPE=application
+TARGET=ONLINE
+STATE=ONLINE on pointdb2
+
+NAME=ora.pointdb2.LISTENER_POINTDB2.lsnr
+TYPE=application
+TARGET=ONLINE
+STATE=ONLINE on pointdb2
+
+NAME=ora.pointdb2.gsd
+TYPE=application
+TARGET=OFFLINE
+STATE=OFFLINE
+
+NAME=ora.pointdb2.ons
+TYPE=application
+TARGET=ONLINE
+STATE=ONLINE on pointdb2
+
+NAME=ora.pointdb2.vip
+TYPE=ora.cluster_vip_net1.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb2
+
+NAME=ora.scan1.vip
+TYPE=ora.scan_vip.type
+TARGET=ONLINE
+STATE=ONLINE on pointdb2
+

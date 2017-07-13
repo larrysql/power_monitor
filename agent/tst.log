@@ -1,0 +1,4 @@
+2016-03-15 10:48:18,308 - logt.py:18 - tst - first info message
+2016-03-15 10:48:18,308 - logt.py:19 - tst - first debug message
+2016-03-15 10:48:25,491 - logt.py:18 - tst - first info message
+2016-03-15 10:48:25,491 - logt.py:19 - tst - first debug message
